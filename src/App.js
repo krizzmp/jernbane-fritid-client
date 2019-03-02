@@ -1,17 +1,13 @@
 import React from "react";
-import Select from "react-select";
-import {
-  TextInput,
-  FormItem,
-  MultiSelect,
-  Checkbox,
-  DropdownV2,
-  DropdownItem,
-  DropdownSkeleton,
-  FormGroup,
-  Button
-} from "carbon-components-react";
-import "carbon-components/css/carbon-components.css";
+// import {
+//   Checkbox,
+//   DropdownV2,
+// } from "carbon-components-react";
+import MultiSelect from "./components/MultiSelect";
+import TextInput from "./components/TextInput";
+import DropDown from "./components/DropDown";
+import CheckBox from "./components/Checkbox";
+import Button from "@material-ui/core/Button";
 
 function App() {
   const [name, setName] = React.useState("");
@@ -26,88 +22,64 @@ function App() {
 
   return (
     <div>
-      <FormItem>
-        <TextInput
-          id="navn"
-          labelText="Navn"
-          value={name}
-          onChange={e => setName(e.target.value)}
-        />
-      </FormItem>
+      <TextInput
+        id="navn"
+        labelText="Navn"
+        value={name}
+        onChange={e => setName(e.target.value)}
+      />
 
-      <FormItem>
-        <TextInput
-          id="cpr"
-          labelText="CPR-nummer"
-          value={cpr}
-          onChange={e => setCpr(e.target.value)}
-        />
-      </FormItem>
+      <TextInput
+        id="cpr"
+        labelText="CPR-nummer"
+        value={cpr}
+        onChange={e => setCpr(e.target.value)}
+      />
 
-      <FormItem>
-        <TextInput
-          id="addr"
-          labelText="Addresse"
-          value={addr}
-          onChange={e => setAddr(e.target.value)}
-        />
-      </FormItem>
+      <TextInput
+        id="addr"
+        labelText="Addresse"
+        value={addr}
+        onChange={e => setAddr(e.target.value)}
+      />
 
-      <FormItem>
-        <TextInput
-          id="email"
-          labelText="E-mail"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-      </FormItem>
+      <TextInput
+        id="email"
+        labelText="E-mail"
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+      />
 
-      <FormItem>
-        <TextInput
-          id="phone"
-          labelText="Telefon"
-          value={phone}
-          onChange={e => setPhone(e.target.value)}
-        />
-      </FormItem>
+      <TextInput
+        id="phone"
+        labelText="Telefon"
+        value={phone}
+        onChange={e => setPhone(e.target.value)}
+      />
 
       {/* Medlemsblad checkbox */}
-      <FormItem>
-        <Checkbox
-          id="medlemsblad"
-          labelText="Medlemsblad"
-          checked={medlemsblad}
-          onChange={e => setMedlemsblad(e)}
-        />
-      </FormItem>
-
-      {/* Company dropdown */}
-      <FormItem>
-        <DropdownV2
-          items={items}
-          label="Virksomhed"
-          itemToString={item => (item ? item.text : "")}
-        />
-      </FormItem>
+      <CheckBox
+        labelText="Medlemsblad"
+        checked={medlemsblad}
+        setChecked={setMedlemsblad}
+      />
+      {/*/!* Company dropdown *!/*/}
+      <DropDown
+        id="virksomhed"
+        labelText="Virksomhed"
+        items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
+        onChange={({ selectedItems }) => setMemberships(selectedItems)}
+      />
       {/* membership checkboxes */}
-      <FormGroup legendText="test">
-        <MultiSelect
-          label="Medlemskab"
-          listBoxMenuIconTranslationIds={{
-            "close.menu": "Close menu",
-            "open.menu": "Open menu"
-          }}
-          title={true}
-          items={[
-            { id: "mk", text: "Motion København" },
-            { id: "jf", text: "Jernbane Fritid" },
-            { id: "ma", text: "Motion Århus" }
-          ]}
-          itemToString={item => (item ? item.text : "")}
-          onChange={({ selectedItems }) => setMemberships(selectedItems)}
-        />
-      </FormGroup>
-      <Button type="submit">Submit</Button>
+      <MultiSelect
+        id="memberships"
+        labelText="Memlemskaber"
+        items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
+        onChange={({ selectedItems }) => setMemberships(selectedItems)}
+      />
+      <Button variant="contained" color="primary">
+        Next
+      </Button>
     </div>
   );
 }

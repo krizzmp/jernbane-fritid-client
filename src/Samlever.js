@@ -1,25 +1,14 @@
 import React from "react";
-import {
-  TextInput,
-  FormItem,
-  MultiSelect,
-  Form,
-  Button,
-  FormGroup
-} from "carbon-components-react";
-import "carbon-components/css/carbon-components.css";
+// import { Button, Form } from "carbon-components-react";
+import MultiSelect from "./components/MultiSelect";
+import TextInput from "./components/TextInput";
+
 function Samlever() {
   const [cpr, setCpr] = React.useState("");
   const [name, setName] = React.useState("");
   const [memberships, setMemberships] = React.useState([]);
   return (
-    <Form
-      style={{ padding: 32, background: "#fff" }}
-      onSubmit={e => {
-        e.preventDefault();
-        console.log(e);
-      }}
-    >
+    <div>
       <TextInput
         id="cpr"
         labelText="Cpr nr"
@@ -33,24 +22,14 @@ function Samlever() {
         value={name}
         onChange={({ target: { value } }) => setName(value)}
       />
-      <FormGroup legendText="Medlemskab" className="multiGroup">
-        <MultiSelect
-          label=""
-          listBoxMenuIconTranslationIds={{
-            "close.menu": "Close menu",
-            "open.menu": "Open menu"
-          }}
-          items={[
-            { id: "mk", text: "Motion København" },
-            { id: "jf", text: "Jernbane Fritid" },
-            { id: "ma", text: "Motion Århus" }
-          ]}
-          itemToString={item => (item ? item.text : "")}
-          onChange={({ selectedItems }) => setMemberships(selectedItems)}
-        />
-      </FormGroup>
-      <Button type="submit">Submit</Button>
-    </Form>
+      <MultiSelect
+        id="memberships"
+        labelText="Memlemskaber"
+        items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
+        onChange={({ selectedItems }) => setMemberships(selectedItems)}
+      />
+      <button type="submit">Submit</button>
+    </div>
   );
 }
 export default Samlever;
