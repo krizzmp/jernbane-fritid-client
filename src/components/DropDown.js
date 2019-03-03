@@ -1,4 +1,3 @@
-// @flow
 import React from "react";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -7,6 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import * as ReactDOM from "react-dom";
 import { makeStyles } from "@material-ui/styles";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 const useStyles = makeStyles(theme => {
   return {
@@ -14,29 +14,24 @@ const useStyles = makeStyles(theme => {
     formControl: {
       display: "flex",
       flexWrap: "wrap",
-      margin: theme.spacing.unit
-      // minWidth: 120
-    },
-    selectEmpty: {
-      marginTop: theme.spacing.unit * 2
+      margin: theme.spacing.unit,
+      marginBottom: theme.spacing.unit * 2
     }
   };
 });
-type PropType = {
-  onChange?: (obj: { id: string, text: string }) => void,
-  items?: string[],
-  id: string,
-  labelText: string
-};
 export default function DropDown({
   onChange = () => {},
   items = ["test", "test 2"],
   id,
-  labelText
-}: PropType) {
+  label,
+  value,
+  required,
+  error,
+  helperText,
+  multiple = false
+}) {
   const classes = useStyles();
   const [labelWidth, setLabelWidth] = React.useState(0);
-  const [values, setValues] = React.useState([]);
   const inputLabelRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -44,21 +39,24 @@ export default function DropDown({
   }, []);
 
   function handleChange(event) {
-    console.log(event.target.value);
-    setValues(event.target.value);
+    onChange(event.target.value);
   }
   return (
-    <FormControl className={classes.formControl} variant="outlined">
+    <FormControl
+      className={classes.formControl}
+      variant="outlined"
+      required={required}
+      error={error}
+    >
       <InputLabel ref={inputLabelRef} htmlFor={id}>
-        {labelText}
+        {label}
       </InputLabel>
       <Select
+        multiple={multiple}
         fullWidth
-        value={values}
+        value={value}
         onChange={handleChange}
-        input={
-          <OutlinedInput labelWidth={labelWidth} name={labelText} id={id} />
-        }
+        input={<OutlinedInput labelWidth={labelWidth} name={label} id={id} />}
       >
         {items.map(name => (
           <MenuItem key={name} value={name}>
@@ -66,6 +64,7 @@ export default function DropDown({
           </MenuItem>
         ))}
       </Select>
+      <FormHelperText>{helperText}</FormHelperText>
     </FormControl>
   );
 }

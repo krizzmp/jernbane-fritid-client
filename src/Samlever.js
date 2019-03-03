@@ -1,7 +1,7 @@
 import React from "react";
 // import { Button, Form } from "carbon-components-react";
-import MultiSelect from "./components/MultiSelect";
-import TextInput from "./components/TextInput";
+import Input from './components/Input'
+import DropDown from './components/DropDown'
 
 function Samlever() {
   const [cpr, setCpr] = React.useState("");
@@ -9,24 +9,32 @@ function Samlever() {
   const [memberships, setMemberships] = React.useState([]);
   return (
     <div>
-      <TextInput
+      <Input
         id="cpr"
-        labelText="Cpr nr"
-        type="text"
+        label="CPR-nummer"
         value={cpr}
-        onChange={({ target: { value } }) => setCpr(value)}
+        required={true}
+        onChange={setCpr}
+        helperText="CPR-nummer"
       />
-      <TextInput
-        id="name"
-        labelText="Navn"
+
+      <Input
+        id="navn"
+        label="Navn"
         value={name}
-        onChange={({ target: { value } }) => setName(value)}
+        required={true}
+        onChange={setName}
+        helperText="Navn"
       />
-      <MultiSelect
+      <DropDown
+        multiple={true}
         id="memberships"
-        labelText="Memlemskaber"
+        label="Memlemskaber"
         items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
-        onChange={({ selectedItems }) => setMemberships(selectedItems)}
+        onChange={setMemberships}
+        value={memberships}
+        required={true}
+        helperText="Memlemskaber"
       />
       <button type="submit">Submit</button>
     </div>

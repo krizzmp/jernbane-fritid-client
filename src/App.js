@@ -3,11 +3,10 @@ import React from "react";
 //   Checkbox,
 //   DropdownV2,
 // } from "carbon-components-react";
-import MultiSelect from "./components/MultiSelect";
-import TextInput from "./components/TextInput";
 import DropDown from "./components/DropDown";
 import CheckBox from "./components/Checkbox";
 import Button from "@material-ui/core/Button";
+import Input from './components/Input'
 
 function App() {
   const [name, setName] = React.useState("");
@@ -16,66 +15,88 @@ function App() {
   const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [medlemsblad, setMedlemsblad] = React.useState(false);
+  const [company, setCompany] = React.useState("");
   const [memberships, setMemberships] = React.useState([]);
 
   const items = [{ id: "dsb", text: "DSB" }, { id: "stog", text: "S-Tog" }];
 
   return (
     <div>
-      <TextInput
-        id="navn"
-        labelText="Navn"
-        value={name}
-        onChange={e => setName(e.target.value)}
-      />
-
-      <TextInput
+      <Input
         id="cpr"
-        labelText="CPR-nummer"
+        label="CPR-nummer"
         value={cpr}
-        onChange={e => setCpr(e.target.value)}
+        required={true}
+        onChange={setCpr}
+        helperText="CPR-nummer"
       />
 
-      <TextInput
+      <Input
+        id="navn"
+        label="Navn"
+        value={name}
+        required={true}
+        onChange={setName}
+        helperText="Navn"
+      />
+
+
+      <Input
         id="addr"
-        labelText="Addresse"
+        label="Addresse"
         value={addr}
-        onChange={e => setAddr(e.target.value)}
+        required={true}
+        onChange={setAddr}
+        helperText="Addresse"
       />
 
-      <TextInput
+      <Input
         id="email"
-        labelText="E-mail"
+        label="E-mail"
         value={email}
-        onChange={e => setEmail(e.target.value)}
+        required={true}
+        onChange={setEmail}
+        helperText="Email addresse"
       />
 
-      <TextInput
+      <Input
         id="phone"
-        labelText="Telefon"
+        label="Telefon"
         value={phone}
-        onChange={e => setPhone(e.target.value)}
+        required={true}
+        onChange={setPhone}
+        helperText="Telefon nr"
       />
 
       {/* Medlemsblad checkbox */}
       <CheckBox
-        labelText="Medlemsblad"
-        checked={medlemsblad}
-        setChecked={setMedlemsblad}
+        label="Medlemsblad"
+        id="medlemsblad"
+        value={medlemsblad}
+        required={true}
+        onChange={setMedlemsblad}
+        helperText="Medlemsblad"
       />
       {/*/!* Company dropdown *!/*/}
       <DropDown
         id="virksomhed"
-        labelText="Virksomhed"
+        label="Virksomhed"
         items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
-        onChange={({ selectedItems }) => setMemberships(selectedItems)}
+        onChange={setCompany}
+        value={company}
+        required={true}
+        helperText="Virksomhed"
       />
       {/* membership checkboxes */}
-      <MultiSelect
+      <DropDown
+        multiple={true}
         id="memberships"
-        labelText="Memlemskaber"
+        label="Memlemskaber"
         items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
-        onChange={({ selectedItems }) => setMemberships(selectedItems)}
+        onChange={setMemberships}
+        value={memberships}
+        required={true}
+        helperText="Memlemskaber"
       />
       <Button variant="contained" color="primary">
         Next
