@@ -4,33 +4,35 @@ import "./bootstrap";
 import "./index.css";
 import Member from "./Member";
 import Samlever from "./Samlever";
-import { BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Typography from "@material-ui/core/Typography";
+import { GlobalStateProvider } from "./state";
+import ChildList from "./Child";
+import Review from "./Review";
+
 let theme = createMuiTheme({
   typography: {
-    useNextVariants: true,
-  },
+    useNextVariants: true
+  }
 });
 
 function isStepSkipped(index) {
   return false;
 }
 function Fron({ steps }) {
-  const [activeStep, setActiveStep] = React.useState(0)
-  console.log(activeStep)
-  const Component = steps[activeStep].component;
+  const [activeStep, setActiveStep] = React.useState(3);
+  const Page = steps[activeStep].component;
   return (
     <div>
       <Stepper activeStep={activeStep}>
-        {steps.map((obj, index) => {
+        {steps.map((step, index) => {
           const stepProps = {};
           const labelProps = {};
-          if (obj.optional) {
+          if (step.optional) {
             labelProps.optional = (
               <Typography variant="caption">Optional</Typography>
             );
@@ -39,29 +41,31 @@ function Fron({ steps }) {
             stepProps.completed = false;
           }
           return (
-            <Step key={obj.title} {...stepProps}>
-              <StepLabel {...labelProps}>{obj.title}</StepLabel>
+            <Step key={step.title} {...stepProps}>
+              <StepLabel {...labelProps}>{step.title}</StepLabel>
             </Step>
           );
         })}
       </Stepper>
-      <Component onNext={()=>setActiveStep(activeStep+1)} />
+      <Page
+        onNext={() => setActiveStep(activeStep + 1)}
+        onPrev={() => setActiveStep(activeStep - 1)}
+      />
     </div>
   );
 }
 function Root() {
   let steps = [
-    { title: "member", component: Member, optional: false },
+    { title: "Member", component: Member, optional: false },
     { title: "Samlever", component: Samlever, optional: true },
-    { title: "Barn", component: Samlever, optional: true },
-    { title: "Betalingsmåde", component: Samlever, optional: false },
-    { title: "Review", component: Samlever, optional: false }
+    { title: "Barn", component: ChildList, optional: true },
+    { title: "Review", component: Review, optional: false }
   ];
   return (
     <ThemeProvider theme={theme}>
-      <Router>
+      <GlobalStateProvider>
         <Fron steps={steps} />
-      </Router>
+      </GlobalStateProvider>
     </ThemeProvider>
   );
 }

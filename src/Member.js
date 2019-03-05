@@ -1,19 +1,21 @@
-import React from 'react'
-import DropDown from './components/DropDown'
-import CheckBox from './components/Checkbox'
-import Button from '@material-ui/core/Button'
-import Input from './components/Input'
+import React from "react";
+import DropDown from "./components/DropDown";
+import CheckBox from "./components/Checkbox";
+import Button from "@material-ui/core/Button";
+import Input from "./components/Input";
+import { useGlobalState } from "./state";
+function Member({ onNext, onPrev }) {
+  const [name, setName] = useGlobalState("member_name");
+  const [cpr, setCpr] = useGlobalState("member_cpr");
+  const [addr, setAddr] = useGlobalState("member_addr");
+  const [email, setEmail] = useGlobalState("member_email");
+  const [phone, setPhone] = useGlobalState("member_phone");
+  const [medlemsblad, setMedlemsblad] = useGlobalState("member_medlemsblad");
+  const [company, setCompany] = useGlobalState("member_company");
+  const [memberships, setMemberships] = useGlobalState("member_memberships");
+  const [payment, setPayment] = useGlobalState("member_payment");
 
-function Member({onNext}) {
-  const [name, setName] = React.useState("");
-  const [cpr, setCpr] = React.useState("");
-  const [addr, setAddr] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [phone, setPhone] = React.useState("");
-  const [medlemsblad, setMedlemsblad] = React.useState(false);
-  const [company, setCompany] = React.useState("");
-  const [memberships, setMemberships] = React.useState([]);
-
+  const canUseDsbMotion = company === "DSB" || company === "S-Tog";
   return (
     <div>
       <Input
@@ -33,7 +35,6 @@ function Member({onNext}) {
         onChange={setName}
         helperText="Navn"
       />
-
 
       <Input
         id="addr"
@@ -73,7 +74,7 @@ function Member({onNext}) {
       <DropDown
         id="virksomhed"
         label="Virksomhed"
-        items={["DSB", "S-Tog"]}
+        items={["DSB", "S-Tog", "Arriva", "Bane Danmark"]}
         onChange={setCompany}
         value={company}
         required={true}
@@ -82,16 +83,33 @@ function Member({onNext}) {
       <DropDown
         multiple={true}
         id="memberships"
-        label="Memlemskaber"
+        label="Medlemskaber"
         items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
         onChange={setMemberships}
         value={memberships}
         required={true}
-        helperText="Memlemskaber"
+        helperText="Medlemskaber"
       />
-      <Button variant="contained" color="primary" onClick={onNext}>
-        Next
-      </Button>
+      <DropDown
+        id="betalingmåde"
+        label="Betalingmåde"
+        items={[
+          ...(canUseDsbMotion ? ["DSB betalt motion"] : []),
+          "PBS",
+          "Girokort",
+          "Løntræk"
+        ]}
+        onChange={setPayment}
+        value={payment}
+        required={true}
+        helperText="Betalingmåde"
+      />
+      <div style={{ display: "flex" }}>
+        <div style={{ flex: 1 }} />
+        <Button variant="contained" color="primary" onClick={onNext}>
+          Fortsæt
+        </Button>
+      </div>
     </div>
   );
 }

@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => {
     formControl: {
       display: "flex",
       flexWrap: "wrap",
-      margin: theme.spacing.unit,
+      // margin: theme.spacing.unit,
       marginBottom: theme.spacing.unit * 2
     }
   };
@@ -36,7 +36,7 @@ export default function DropDown({
 
   React.useEffect(() => {
     setLabelWidth(ReactDOM.findDOMNode(inputLabelRef.current).offsetWidth);
-  }, []);
+  }, [label]);
 
   function handleChange(event) {
     onChange(event.target.value);
