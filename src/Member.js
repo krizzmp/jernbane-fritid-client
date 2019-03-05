@@ -1,14 +1,10 @@
-import React from "react";
-// import {
-//   Checkbox,
-//   DropdownV2,
-// } from "carbon-components-react";
-import DropDown from "./components/DropDown";
-import CheckBox from "./components/Checkbox";
-import Button from "@material-ui/core/Button";
+import React from 'react'
+import DropDown from './components/DropDown'
+import CheckBox from './components/Checkbox'
+import Button from '@material-ui/core/Button'
 import Input from './components/Input'
 
-function App() {
+function Member({onNext}) {
   const [name, setName] = React.useState("");
   const [cpr, setCpr] = React.useState("");
   const [addr, setAddr] = React.useState("");
@@ -17,8 +13,6 @@ function App() {
   const [medlemsblad, setMedlemsblad] = React.useState(false);
   const [company, setCompany] = React.useState("");
   const [memberships, setMemberships] = React.useState([]);
-
-  const items = [{ id: "dsb", text: "DSB" }, { id: "stog", text: "S-Tog" }];
 
   return (
     <div>
@@ -68,7 +62,6 @@ function App() {
         helperText="Telefon nr"
       />
 
-      {/* Medlemsblad checkbox */}
       <CheckBox
         label="Medlemsblad"
         id="medlemsblad"
@@ -77,17 +70,15 @@ function App() {
         onChange={setMedlemsblad}
         helperText="Medlemsblad"
       />
-      {/*/!* Company dropdown *!/*/}
       <DropDown
         id="virksomhed"
         label="Virksomhed"
-        items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
+        items={["DSB", "S-Tog"]}
         onChange={setCompany}
         value={company}
         required={true}
         helperText="Virksomhed"
       />
-      {/* membership checkboxes */}
       <DropDown
         multiple={true}
         id="memberships"
@@ -98,10 +89,10 @@ function App() {
         required={true}
         helperText="Memlemskaber"
       />
-      <Button variant="contained" color="primary">
+      <Button variant="contained" color="primary" onClick={onNext}>
         Next
       </Button>
     </div>
   );
 }
-export default App;
+export default Member;
