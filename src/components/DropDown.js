@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => {
 });
 export default function DropDown({
   onChange = () => {},
+  onBlur = () => {},
   items = ["test", "test 2"],
   id,
   label,
@@ -34,12 +35,18 @@ export default function DropDown({
   const [labelWidth, setLabelWidth] = React.useState(0);
   const inputLabelRef = React.useRef(null);
 
-  React.useEffect(() => {
-    setLabelWidth(ReactDOM.findDOMNode(inputLabelRef.current).offsetWidth);
-  }, [label]);
+  React.useEffect(
+    () => {
+      setLabelWidth(ReactDOM.findDOMNode(inputLabelRef.current).offsetWidth);
+    },
+    [label]
+  );
 
   function handleChange(event) {
     onChange(event.target.value);
+  }
+  function handleBlur(event) {
+    onBlur(event.target.value);
   }
   return (
     <FormControl
@@ -56,7 +63,14 @@ export default function DropDown({
         fullWidth
         value={value}
         onChange={handleChange}
-        input={<OutlinedInput labelWidth={labelWidth} name={label} id={id} />}
+        input={
+          <OutlinedInput
+            labelWidth={labelWidth}
+            name={label}
+            id={id}
+            onBlur={handleBlur}
+          />
+        }
       >
         {items.map(name => (
           <MenuItem key={name} value={name}>

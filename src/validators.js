@@ -1,5 +1,15 @@
-export class CprValidator {
-  validate(value) {
+class Validator{
+  validateChange(value) {
+
+  }
+  validateBlur(value) {
+
+  }
+  validateSubmit(value){
+  }
+}
+export class CprValidator extends Validator{
+  validateChange(value) {
     if (/^[0-9 ]*$/.test(value) && value.replace(/ /g, "").length <= 10) {
       return null;
     }
@@ -11,15 +21,18 @@ export class CprValidator {
     }
     return "Et cpr nummer skal have 10 tegn";
   }
+  validateSubmit(value){
+    return this.validateChange(value)||this.validateBlur(value);
+  }
 }
-export class RequiredValidator {
-  validate(value) {
+export class RequiredValidator extends Validator {
+  validateChange(value) {
     return value.length === 0 ? "Dette felt må ikke være tomt" : null;
   }
-  validateBlur(value) {}
+
 }
-export class PhoneValidator {
-  validate(value) {
+export class PhoneValidator extends Validator {
+  validateChange(value) {
     if (/^[0-9 ]*$/.test(value) && value.replace(/ /g, "").length <= 8) {
       return null;
     }
@@ -32,8 +45,7 @@ export class PhoneValidator {
     return "Et telefon nummer skal have 8 cifre";
   }
 }
-export class EmailValidator {
-  validate(email) {}
+export class EmailValidator extends Validator{
   validateBlur(email) {
     if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return null;

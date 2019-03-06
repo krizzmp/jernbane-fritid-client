@@ -5,7 +5,6 @@ const useStyles = makeStyles(theme => ({
   container: {
     display: "flex",
     flexWrap: "wrap",
-    // margin: theme.spacing.unit,
     marginBottom: theme.spacing.unit * 2
   }
 }));
@@ -17,40 +16,17 @@ export default function Input({
   onChange,
   required,
   helperText,
+  error,
   validators = [],
+  onBlur = () => {},
   ...rest
 }) {
   const classes = useStyles();
-  const [helperText2, setHelperText2] = React.useState(helperText);
-  const [error2, setError2] = React.useState(false);
-
   function handleChange(value) {
-    let hasError = false;
-    for (const validator of validators) {
-      const errorMsg = validator.validate(value);
-      if (errorMsg) {
-        setHelperText2(errorMsg);
-        setError2(true);
-        hasError = true;
-        break;
-      }
-    }
-    if (hasError === false) {
-      setHelperText2(helperText);
-      setError2(false);
-    }
-
     onChange(value);
   }
   function handleBlur(value) {
-    for (const validator of validators) {
-      const errorMsg = validator.validateBlur(value);
-      if (errorMsg) {
-        setHelperText2(errorMsg);
-        setError2(true);
-        break;
-      }
-    }
+    onBlur(value);
   }
   return (
     <div className={classes.container}>
@@ -62,8 +38,8 @@ export default function Input({
         fullWidth
         variant="outlined"
         required={required}
-        error={error2}
-        helperText={helperText2}
+        error={error}
+        helperText={helperText}
         onBlur={e => handleBlur(e.target.value)}
         {...rest}
       />
