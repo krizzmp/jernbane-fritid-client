@@ -1,58 +1,17 @@
-import React from "react";
-import DropDown from "./components/DropDown";
-import CheckBox from "./components/Checkbox";
-import Button from "@material-ui/core/Button";
-import Input from "./components/Input";
-import { useGlobalState } from "./state";
+import React from 'react'
+import DropDown from './components/DropDown'
+import CheckBox from './components/Checkbox'
+import Button from '@material-ui/core/Button'
+import Input from './components/Input'
+import { useGlobalState } from './state'
 import {
   CprValidator,
-  RequiredValidator,
+  EmailValidator,
   PhoneValidator,
-  EmailValidator
-} from "./validators";
+  RequiredValidator
+} from './validators'
+import { useValidation } from './useValidation'
 
-function useValidation(stateName, validators, defaultHelperText) {
-  const [value, set_value] = useGlobalState(stateName);
-  const [helperText, set_helperText] = React.useState(defaultHelperText);
-  const [error, set_error] = React.useState(false);
-  const onChange = value => {
-    set_helperText(defaultHelperText);
-    set_error(false);
-    for (const validator of validators) {
-      let error1 = validator.validateChange(value);
-      if (error1) {
-        set_helperText(error1);
-        set_error(true);
-        break;
-      }
-    }
-    set_value(value);
-  };
-  const onBlur = value => {
-    for (const validator of validators) {
-      let error1 = validator.validateBlur(value);
-      if (error1) {
-        set_helperText(error1);
-        set_error(true);
-        break;
-      }
-    }
-  };
-  const submit = () => {
-    for (const validator of validators) {
-      let error1 =
-        validator.validateSubmit(value) ||
-        validator.validateBlur(value) ||
-        validator.validateChange(value);
-      if (error1) {
-        set_helperText(error1);
-        set_error(true);
-        return error1;
-      }
-    }
-  };
-  return [{ value, onChange, onBlur, helperText, error }, submit];
-}
 function Member({ onNext, onPrev }) {
   const [name, submit_name] = useValidation(
     "member_name",

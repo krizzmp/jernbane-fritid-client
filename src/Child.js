@@ -8,7 +8,8 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import AddIcon from "@material-ui/icons/Add";
+import { useChildValidation } from "./useValidation";
+import { CprValidator, RequiredValidator } from "./validators";
 function useMyState(index, key, defaultValue) {
   const defaultObject = { [key]: defaultValue };
   const [children, setChildren] = useGlobalState("children");
@@ -26,10 +27,20 @@ function useMyState(index, key, defaultValue) {
   return [child[key], set];
 }
 function Child({ index, deleteThisChild }) {
-  const [cpr, setCpr] = useMyState(index, `cpr`, "");
-  const [name, setName] = useMyState(index, `name`, "");
-  const [memberships, setMemberships] = useMyState(index, `memberships`, []);
-  const [payment, setPayment] = useMyState(index, `payment`, []);
+  const [cpr, submit_cpr] = useChildValidation(
+    index,
+    `cpr`,
+    "",
+    [new CprValidator(), new RequiredValidator()],
+    "CPR nr"
+  );
+  const [name, submit_name] = useChildValidation(index, `name`, "",[ new RequiredValidator()],
+    "Navn");
+  const [memberships, submit_memberships] = useChildValidation(index, `memberships`, [],[ new RequiredValidator()],
+    "Medlemskaber");
+  const [payment, submit_payment] = useChildValidation(index, `payment`, [],[ new RequiredValidator()],
+    "Betalingsmåde");
+
   const [company] = useGlobalState("member_company");
   const canUseDsbMotion = company === "DSB" || company === "S-Tog";
   const [expanded, setExpanded] = useGlobalState("children_expandedId");
@@ -43,7 +54,7 @@ function Child({ index, deleteThisChild }) {
       onChange={handleChange(index)}
     >
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography style={{ flex: 1 }}>{name || "Ikke navngivet"}</Typography>
+        <Typography style={{ flex: 1 }}>{name.value || "Ikke navngivet"}</Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails
         style={{ display: "flex", flexDirection: "column" }}
@@ -51,29 +62,23 @@ function Child({ index, deleteThisChild }) {
         <Input
           id="cpr"
           label="CPR-nummer"
-          value={cpr}
           required={true}
-          onChange={setCpr}
-          helperText="CPR-nummer"
+          {...cpr}
         />
 
         <Input
           id="navn"
           label="Navn"
-          value={name}
           required={true}
-          onChange={setName}
-          helperText="Navn"
-        />
+          {...name}
+          />
         <DropDown
           multiple={true}
           id="memberships"
           label="Medlemskaber"
           items={["Jernbane Fritid", "Motion København", "Motion Århus"]}
-          onChange={setMemberships}
-          value={memberships}
           required={true}
-          helperText="Memlemskaber"
+          {...memberships}
         />
         <DropDown
           id="betalingmåde"
@@ -84,10 +89,8 @@ function Child({ index, deleteThisChild }) {
             "Girokort",
             "Løntræk"
           ]}
-          onChange={setPayment}
-          value={payment}
           required={true}
-          helperText="Betalingmåde"
+          {...payment}
         />
         <Button
           variant="outlined"
@@ -115,7 +118,7 @@ function ChildList({ onNext, onPrev }) {
   const [numberOfChildren, setNumberOfChildren] = useGlobalState(
     "children_count"
   );
-  const [expanded, setExpanded] = useGlobalState("children_expandedId");
+  const [, setExpanded] = useGlobalState("children_expandedId");
   const g = () => {
     setNumberOfChildren(numberOfChildren + 1);
     setTimeout(() => setExpanded(numberOfChildren), 0);
@@ -133,7 +136,6 @@ function ChildList({ onNext, onPrev }) {
         </Button>
         <div style={{ flex: 1 }} />
         <Button variant="outlined" color="primary" onClick={g} style={m8}>
-          {/* <AddIcon style={{ marginRight: 6, marginLeft: -4 }} /> */}
           tilføj barn
         </Button>
 
