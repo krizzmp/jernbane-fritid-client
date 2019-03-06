@@ -4,6 +4,12 @@ import CheckBox from "./components/Checkbox";
 import Button from "@material-ui/core/Button";
 import Input from "./components/Input";
 import { useGlobalState } from "./state";
+import {
+  CprValidator,
+  RequiredValidator,
+  PhoneValidator,
+  EmailValidator
+} from "./validators";
 function Member({ onNext, onPrev }) {
   const [name, setName] = useGlobalState("member_name");
   const [cpr, setCpr] = useGlobalState("member_cpr");
@@ -16,6 +22,7 @@ function Member({ onNext, onPrev }) {
   const [payment, setPayment] = useGlobalState("member_payment");
 
   const canUseDsbMotion = company === "DSB" || company === "S-Tog";
+
   return (
     <div>
       <Input
@@ -25,6 +32,7 @@ function Member({ onNext, onPrev }) {
         required={true}
         onChange={setCpr}
         helperText="CPR-nummer"
+        validators={[new CprValidator(), new RequiredValidator()]}
       />
 
       <Input
@@ -34,6 +42,7 @@ function Member({ onNext, onPrev }) {
         required={true}
         onChange={setName}
         helperText="Navn"
+        validators={[new RequiredValidator()]}
       />
 
       <Input
@@ -43,6 +52,7 @@ function Member({ onNext, onPrev }) {
         required={true}
         onChange={setAddr}
         helperText="Addresse"
+        validators={[new RequiredValidator()]}
       />
 
       <Input
@@ -52,6 +62,8 @@ function Member({ onNext, onPrev }) {
         required={true}
         onChange={setEmail}
         helperText="Email addresse"
+        type="email"
+        validators={[new EmailValidator(), new RequiredValidator()]}
       />
 
       <Input
@@ -61,6 +73,7 @@ function Member({ onNext, onPrev }) {
         required={true}
         onChange={setPhone}
         helperText="Telefon nr"
+        validators={[new PhoneValidator(), new RequiredValidator()]}
       />
 
       <CheckBox

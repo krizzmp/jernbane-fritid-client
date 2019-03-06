@@ -24,7 +24,7 @@ function isStepSkipped(index) {
   return false;
 }
 function Fron({ steps }) {
-  const [activeStep, setActiveStep] = React.useState(3);
+  const [activeStep, setActiveStep] = React.useState(0);
   const Page = steps[activeStep].component;
   return (
     <div>

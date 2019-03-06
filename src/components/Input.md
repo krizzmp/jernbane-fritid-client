@@ -1,33 +1,26 @@
 ```js
 import React from "react";
 import Input from "./Input";
-function useValidation(validator, description, setValue) {
-  const [error, setError] = React.useState(false);
-  const [helperText, setHelperText] = React.useState(description);
-  function onChange(v) {
-    let hasError = validator(v);
-    setError(!!hasError);
-    setHelperText(hasError || description);
-    setValue(v);
-  }
-  return { error, helperText, onChange };
-}
-function Input2() {
-  const [value, setValue] = React.useState();
-  const t = useValidation(validator, "cpr number", setValue);
-
-  function validator(v) {
-    if (v === "") {
-      return null;
-    }
+class Test {
+  validate(v) {
     if (/^[0-9]*$/.test(v) === false) {
       return "must contain only numbers";
     }
     return null;
   }
+}
+function Input2() {
+  const [value, setValue] = React.useState();
 
   return (
-    <Input id="hello" label="cpr nr" value={value} required={true} {...t} />
+    <Input
+      id="hello"
+      label="cpr nr"
+      value={value}
+      required={true}
+      onChange={setValue}
+      validators={[new Test()]}
+    />
   );
 }
 <Input2 />;

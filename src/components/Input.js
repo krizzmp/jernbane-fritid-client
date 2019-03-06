@@ -16,23 +16,55 @@ export default function Input({
   value,
   onChange,
   required,
-  error,
   helperText,
+  validators = [],
   ...rest
 }) {
   const classes = useStyles();
+  const [helperText2, setHelperText2] = React.useState(helperText);
+  const [error2, setError2] = React.useState(false);
+
+  function handleChange(value) {
+    let hasError = false;
+    for (const validator of validators) {
+      const errorMsg = validator.validate(value);
+      if (errorMsg) {
+        setHelperText2(errorMsg);
+        setError2(true);
+        hasError = true;
+        break;
+      }
+    }
+    if (hasError === false) {
+      setHelperText2(helperText);
+      setError2(false);
+    }
+
+    onChange(value);
+  }
+  function handleBlur(value) {
+    for (const validator of validators) {
+      const errorMsg = validator.validateBlur(value);
+      if (errorMsg) {
+        setHelperText2(errorMsg);
+        setError2(true);
+        break;
+      }
+    }
+  }
   return (
     <div className={classes.container}>
       <TextField
         id={id}
         label={label}
         value={value}
-        onChange={e => onChange(e.target.value)}
+        onChange={e => handleChange(e.target.value)}
         fullWidth
         variant="outlined"
         required={required}
-        error={error}
-        helperText={helperText}
+        error={error2}
+        helperText={helperText2}
+        onBlur={e => handleBlur(e.target.value)}
         {...rest}
       />
     </div>
