@@ -1,6 +1,6 @@
 ```js
-import React from 'react';
-import Input from './Input';
+import React from "react";
+import Input from "./Input";
 function useValidation(validator, description, setValue) {
   const [error, setError] = React.useState(false);
   const [helperText, setHelperText] = React.useState(description);
@@ -30,6 +30,5 @@ function Input2() {
     <Input id="hello" label="cpr nr" value={value} required={true} {...t} />
   );
 }
-<Input2
-/>
+<Input2 />;
 ```

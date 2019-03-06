@@ -5,26 +5,71 @@ import { makeStyles } from "@material-ui/styles";
 import { Card, CardContent, Typography, Chip } from "@material-ui/core";
 const useStyles = makeStyles(theme => {
   return {
-    label: {
-      fontFamily: theme.typography.fontFamily,
-      fontSize: theme.typography.pxToRem(16),
-      lineHeight: "54px", // Reset (19px), match the native input line-height
-      display: "flex",
-      flexDirection: "column",
-      color: theme.palette.text.secondary,
-      padding: 8,
-      margin: 8
-    },
     chip: {
       margin: theme.spacing.unit
-    },
-    lines: {
-      //   lineHeight: "48px"
     }
   };
 });
-function Review({ onPrev }) {
+
+function PersonItem(props) {
+  let label = { fontWeight: 700 };
+  if (props.value === undefined) {
+    return null;
+  }
+  return (
+    <div>
+      <span style={label}>{props.labelText}: </span> {props.value}
+    </div>
+  );
+}
+function PersonDetails(props) {
   const classes = useStyles();
+  return (
+    <Card
+      style={{
+        padding: 8,
+        margin: 8
+      }}
+      elevation={4}
+    >
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {props.name}
+        </Typography>
+        <Typography component="p" className={classes.lines}>
+          <PersonItem labelText="CPR" value={props.cpr} />
+          <PersonItem labelText="Addresse" value={props.addr} />
+          <PersonItem labelText="E-mail" value={props.email} />
+          <PersonItem labelText="Telefon" value={props.phone} />
+          <PersonItem
+            labelText="Medlemsblad"
+            value={
+              props.medlemsblad === undefined
+                ? undefined
+                : props.medlemsblad
+                ? "Ja"
+                : "Nej"
+            }
+          />
+          <PersonItem labelText="Virksomhed" value={props.company} />
+          <PersonItem labelText="Betalingsmetode" value={props.payment} />
+          <PersonItem
+            labelText="Medlemskaber"
+            value={
+              <div>
+                {props.memberships.map(membership => (
+                  <Chip label={membership} className={classes.chip} />
+                ))}
+              </div>
+            }
+          />
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+}
+
+function Review({ onPrev }) {
   const [name] = useGlobalState("member_name");
   const [cpr] = useGlobalState("member_cpr");
   const [addr] = useGlobalState("member_addr");
@@ -40,90 +85,32 @@ function Review({ onPrev }) {
   const [paymentSpouse] = useGlobalState("spouse_payment");
   const [children] = useGlobalState("children");
 
-  let styles_person = { border: "1px solid #e5e5e5" };
-  let label = { fontWeight: 700 };
   return (
     <div>
-      <Card className={classes.label} elevation={4}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {name}
-          </Typography>
-          <Typography component="p" className={classes.lines}>
-            <div>
-              <span style={label}>CPR:</span> {cpr}
-            </div>
-            <div>
-              <span style={label}>Addresse:</span> {addr}
-            </div>
-            <div>
-              <span style={label}>E-mail:</span> {email}
-            </div>
-            <div>
-              <span style={label}>Telefon:</span> {phone}
-            </div>
-            <div>
-              <span style={label}>Medlemsblad:</span>{" "}
-              {medlemsblad ? "Ja" : "Nej"}
-            </div>
-            <div>
-              <span style={label}>Virksomhed:</span> {company}
-            </div>
-            <div>
-              <span style={label}>Betalingsmetode:</span> {payment}
-            </div>
-            <div>
-              <div style={label}>Medlemskab:</div>
-              {memberships.map(membership => (
-                <Chip label={membership} className={classes.chip} />
-              ))}
-            </div>
-          </Typography>
-        </CardContent>
-      </Card>
-      <Card className={classes.label} elevation={4}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {nameSpouse}
-          </Typography>
-          <Typography component="p" className={classes.lines}>
-            <div>
-              <span style={label}>CPR:</span> {cprSpouse}
-            </div>
-            <div>
-              <span style={label}>Betalingsmetode:</span> {paymentSpouse}
-            </div>
-            <div>
-              <div style={label}>Medlemskab:</div>
-              {membershipsSpouse.map(membership => (
-                <Chip label={membership} className={classes.chip} />
-              ))}
-            </div>
-          </Typography>
-        </CardContent>
-      </Card>
+      <PersonDetails
+        name={name}
+        cpr={cpr}
+        addr={addr}
+        email={email}
+        phone={phone}
+        medlemsblad={medlemsblad}
+        company={company}
+        payment={payment}
+        memberships={memberships}
+      />
+      <PersonDetails
+        name={nameSpouse}
+        cpr={cprSpouse}
+        payment={paymentSpouse}
+        memberships={membershipsSpouse}
+      />
       {children.map(c => (
-        <Card className={classes.label} elevation={4}>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              {c.name}
-            </Typography>
-            <Typography component="p" className={classes.lines}>
-              <div>
-                <span style={label}>CPR:</span> {c.cpr}
-              </div>
-              <div>
-                <span style={label}>Betalingsmetode:</span> {c.payment}
-              </div>
-              <div>
-                <div style={label}>Medlemskab:</div>
-                {c.memberships.map(membership => (
-                  <Chip label={membership} className={classes.chip} />
-                ))}
-              </div>
-            </Typography>
-          </CardContent>
-        </Card>
+        <PersonDetails
+          name={c.name}
+          cpr={c.cpr}
+          payment={c.payment}
+          memberships={c.memberships}
+        />
       ))}
       <div style={{ display: "flex" }}>
         <Button variant="outlined" color="primary" onClick={onPrev}>
