@@ -5,7 +5,7 @@ import {
   cleanup,
   waitForElement
 } from "react-testing-library";
-import "./bootstrap";
+import "../../jernbane-fritid-client-immer/src/bootstrap";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 import { ThemeProvider } from "@material-ui/styles";
 import Input from "./components/Input";

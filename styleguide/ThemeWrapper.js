@@ -1,6 +1,6 @@
 // styleguide/ThemeWrapper.js
 import React, { Component } from "react";
-import '../src/bootstrap';
+import '../../jernbane-fritid-client-immer/src/bootstrap';
 import { ThemeProvider } from "@material-ui/styles";
 import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 let theme = createMuiTheme();
